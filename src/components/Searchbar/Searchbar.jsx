@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import css from '../../Styles.module.css';
+
 export default class Searchbar extends Component {
     state = {
-        value: ''
+        value: '',
+        status: 'idle',
     }
 
     handleInput = (e) => {
@@ -13,7 +17,7 @@ export default class Searchbar extends Component {
         e.preventDefault();
         const { value } = this.state;
         if (value.trim() === '') {
-            alert('alert');
+            toast.warning('Буляска введіть запит');
             return
         }
         this.props.onSubmit(value);

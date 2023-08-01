@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
+import ImageGallery from './ImageGallery/ImageGallery';
+import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
+import Loader from './Loader/Loader';
+import { ToastContainer } from 'react-toastify';
+
+
 
 class App extends Component {
   state = {
@@ -22,12 +28,13 @@ class App extends Component {
   render() {
     const { result } = this.state;
     return (<div>
+      <ToastContainer autoClose={2000} />
+    
       <Searchbar onSubmit={this.handleFormSubmit} />
-      <ul className="gallery">
-  <li className="gallery-item">
-          {result && <img src={result.hits[0].webformatURL} alt="" />}
-</li>
-</ul>
+      <Loader />
+      <ImageGallery>
+        {result && <ImageGalleryItem options={result.hits} />}
+       </ImageGallery>
    </div>
      
   );
