@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 import css from '../../Styles.module.css';
-import PropTypes from 'prop-types';
+
 
 const modal = document.querySelector('#modal');
 
@@ -18,7 +18,6 @@ export default class Modal extends Component {
 
     handleKeydown = e => {
         if (e.code === 'Escape') {
-            console.log('natusnyv')
             this.props.onClose();
         }
     }
