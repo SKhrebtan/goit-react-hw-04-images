@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-import Modal from '../Modal/Modal'
-import Button from '../Button/Button';
-import Loader from '../Loader/Loader';
-import {GetImages} from '../FetchImages/FetchImages'
+import ImageGalleryItem from '../ImageGalleryItem';
+import Modal from '../Modal'
+import Button from '../Button';
+import Loader from '../Loader';
+import {GetImages} from '../FetchImages'
 import css from '../../Styles.module.css';
 import waitImg from '../../images/waiting.jpg';
 import errorImg from '../../images/error.jpg';
@@ -34,7 +34,8 @@ export default class ImageGallery extends Component {
     error: PropTypes.string,
     showModal: PropTypes.bool,
     modalData: PropTypes.object
-};
+  };
+  messagesEndRef = React.createRef();
     
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.value !== nextProps.value) {
@@ -60,18 +61,19 @@ export default class ImageGallery extends Component {
                 new Error('Щось пішло не так, повторіть спробу')
               );
             })
-            .then(response => {
+            .then(({hits, totalHits}) => {
               this.setState({
                 result:
                   page === 1
-                    ? response.hits
-                    : [...prevState.result, ...response.hits],
+                    ? hits
+                    : [...prevState.result, ...hits],
                 status: 'resolved',
-                totalPages: Math.floor(response.totalHits / 12),
+                totalPages: Math.floor(totalHits / 12),
               });
             })
                   .catch(error => this.setState({ error, status: 'rejected' }))
-    }
+      }
+      this.scrollToBottom()
   }
 
   onLoadMore = () => {
@@ -84,13 +86,18 @@ export default class ImageGallery extends Component {
     }));
   };
 
-  setModalData = modalData => {
+  handleModalData = modalData => {
     this.setState({ modalData, showModal: true });
-    };
+  };
+  
+   scrollToBottom = () => {
+    this.messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   render() {
     const { result, status, showModal, modalData, error, page, totalPages } = this.state;
-  
+    console.log(this.state.totalPages);
+    console.log(this.state.page);
           if (status === 'idle') {
             return <h1 className={css.idletitle}>Введіть запит</h1>;
           }
@@ -99,7 +106,7 @@ export default class ImageGallery extends Component {
       return (
         <>
           <Loader />
-          <img src={waitImg} alt="" width="480" className={css.infoImage} />
+          <img src={waitImg} alt="await" width="480" className={css.infoImage} />
         </>
       );
     }
@@ -108,7 +115,7 @@ export default class ImageGallery extends Component {
       return (
         <>
           <h1 className={css.idletitle}>{error.message}</h1>
-          <img src={errorImg} alt="" width="480" className={css.infoImage} />
+          <img src={errorImg} alt="error" width="480" className={css.infoImage} />
         </>
       );
     }
@@ -117,7 +124,7 @@ export default class ImageGallery extends Component {
       return (
         <>
           <h1 className={css.idletitle}>Нема результатів по даному запиту</h1>
-          <img src={emptyImg} alt="" width="480" className={css.infoImage} />
+          <img src={emptyImg} alt="empty" width="480" className={css.infoImage} />
         </>
       );
     }
@@ -131,7 +138,7 @@ export default class ImageGallery extends Component {
                 <ImageGalleryItem
                   options={item}
                   key={item.id}
-                  onImageClick={this.setModalData}
+                  onImageClick={this.handleModalData}
                 />
               ))}
           </ul>
@@ -141,6 +148,7 @@ export default class ImageGallery extends Component {
           {showModal && (
             <Modal modalData={modalData} onClose={this.toggleModal} />
           )}
+          <div ref={this.messagesEndRef} />
         </>
       );
     }

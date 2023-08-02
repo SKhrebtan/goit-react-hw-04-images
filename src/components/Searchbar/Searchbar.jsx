@@ -3,7 +3,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types';
 import css from '../../Styles.module.css';
-import { FcSearch } from 'react-icons/fc'
+import { FcSearch } from 'react-icons/fc';
+
 export default class Searchbar extends Component {
     state = {
         value: '',
