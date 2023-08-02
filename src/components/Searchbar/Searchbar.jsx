@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
 import css from '../../Styles.module.css';
 import { FcSearch } from 'react-icons/fc'
 export default class Searchbar extends Component {
     state = {
         value: '',
-        status: 'idle',
-    }
+         }
 
     handleInput = (e) => {
         this.setState({ value: e.currentTarget.value.toLowerCase()})
@@ -44,7 +44,11 @@ export default class Searchbar extends Component {
     />
   </form>
 </header>
-        )
-          
+        )          
     }
+}
+
+Searchbar.propTypes = {
+    onSubmit: PropTypes.func,
+    value: PropTypes.string
 }

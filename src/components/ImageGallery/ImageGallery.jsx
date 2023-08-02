@@ -3,11 +3,12 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Modal from '../Modal/Modal'
 import Button from '../Button/Button';
 import Loader from '../Loader/Loader';
-import {getImages} from '../FetchImages/FetchImages'
+import {GetImages} from '../FetchImages/FetchImages'
 import css from '../../Styles.module.css';
 import waitImg from '../../images/waiting.jpg';
 import errorImg from '../../images/error.jpg';
-import emptyImg from '../../images/empty.jpg'
+import emptyImg from '../../images/empty.jpg';
+import PropTypes from 'prop-types';
     
 export default class ImageGallery extends Component {
   state = {
@@ -22,7 +23,18 @@ export default class ImageGallery extends Component {
       largeImageURL: 'https://ik.imagekit.io/demo/medium_cafe_B1iTdD0C.jpg',
       tags: '',
     },
-    };
+  };
+  
+  static propTypes = {
+    page: PropTypes.number,
+    totalPages: PropTypes.number,
+    result: PropTypes.array,
+    status: PropTypes.string,
+    value: PropTypes.string,
+    error: PropTypes.string,
+    showModal: PropTypes.bool,
+    modalData: PropTypes.object
+};
     
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.value !== nextProps.value) {
@@ -38,9 +50,8 @@ export default class ImageGallery extends Component {
     if (prevProps.value !== currentValue || prevState.page !== page
     ) {
       this.setState({ status: 'pending' });
-      setTimeout(
-        () =>
-          getImages(currentValue, page)
+     
+      GetImages(currentValue, page)
             .then(response => {
               if (response.ok) {
                 return response.json();
@@ -60,7 +71,6 @@ export default class ImageGallery extends Component {
               });
             })
                   .catch(error => this.setState({ error, status: 'rejected' }))
-      );
     }
   }
 
