@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import css from '../../Styles.module.css';
-
+import { FcSearch } from 'react-icons/fc'
 export default class Searchbar extends Component {
     state = {
         value: '',
@@ -28,7 +28,8 @@ export default class Searchbar extends Component {
         return (
             <header className={css.searchbar}>
                 <form onSubmit={this.handleSumbit} className={css.searchform}>
-    <button type="submit" className={css.button}>
+                    <button type="submit" className={css.button}>
+                        <FcSearch size={32} />
       <span className={css.button_label}>Search</span>
     </button>
 
